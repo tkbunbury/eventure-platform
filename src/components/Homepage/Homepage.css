@@ -1,0 +1,94 @@
+.hero-section {
+    background-image: url('/home/takai/Northcoders/projects/events-platform-project/events-platform/public/images/kyle-glenn-nXt5HtLmlgE-unsplash.jpg'); 
+    background-size: cover;
+    background-position: center;
+    padding: 150px 0;
+    color: white;
+  }
+  
+  .hero-section h1 {
+    font-size: 3.5rem;
+    font-weight: bold;
+  }
+  
+  .hero-section p {
+    font-size: 1.25rem;
+    margin-bottom: 20px;
+  }
+  
+  .btn-lg {
+    padding: 15px 30px;
+    font-size: 1.25rem;
+  }
+  
+  .card {
+    transition: transform 0.2s ease-in-out;
+  }
+  
+  .card:hover {
+    transform: scale(1.05);
+  }
+
+  .container {
+    margin-top: 30px;
+  }
+
+  .loading-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    flex-direction: column;
+}
+
+.spinner {
+    width: 50px;
+    height: 50px;
+    border: 5px solid rgba(0, 0, 0, 0.1);
+    border-top-color: #007bff;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+.learn-more-button {
+  background: linear-gradient(135deg, #42a5f5, #478ed1);
+  border: none;
+  color: #fff;
+  font-weight: bold;
+  padding: 10px 20px;
+  border-radius: 25px;
+  transition: all 0.3s ease-in-out;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+}
+
+.learn-more-button:hover {
+  background: linear-gradient(135deg, #478ed1, #42a5f5);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+  transform: translateY(-2px);
+}
+
+.learn-more-button:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(66, 165, 245, 0.5);
+}
+
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.custom-button {
+  background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(9,121,184,1) 35%, rgba(0,212,255,1) 100%);
+  border: none;
+  color: white;
+  transition: all 0.3s ease;
+}
+
+.custom-button:hover {
+  color: black; 
+  transform: translateY(-3px); 
+}
+
