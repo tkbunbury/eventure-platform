@@ -1,70 +1,127 @@
-# Getting Started with Create React App
+# Eventure
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Overview
 
-## Available Scripts
+**Eventure** is an events platform that allows an international business to create and share events with community members across the globe. The app enables users to sign up for events and, upon registration, add them to their Google Calendar. 
 
-In the project directory, you can run:
+## Hosted Version
 
-### `npm start`
+The live version of the app is hosted on Firebase and accessible at: [https://events-platform-57a09.web.app](https://events-platform-57a09.web.app)
+## Main Features
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+1. **Event Creation by Staff**: Staff members can create events that will be displayed on the platform.
+2. **User Sign-Up for Events**: Community members can browse and sign up for events.
+   - **Account Creation and Google Sign-In**: Users have the option to create an account directly or sign in through their Google account for quicker access.
+3. **Google Calendar Integration**: Users with a valid Gmail account can add signed-up events directly to their Google Calendar.
+4. **Event Search by Name or Location**: Users can search for specific events by entering a name or location.
+5. **My Events Page for Users**: Users have a dedicated page to view and manage the events they’ve signed up for.
+6. **Created Events Page for Staff**: Staff members have a separate page to view and manage the events they have created.
 
-### `npm test`
+### Roles
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- **Staff Account**: Able to create, delete, and manage events.
+- **User Account**: Can browse, sign up, and add events to their calendar.
+- **Guest**: Can browse events.
 
-### `npm run build`
+> **Note**: Test accounts for staff and user roles are provided below for evaluation.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Tech Stack
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+- **Frontend**: React (JavaScript)
+- **Backend**: Firebase for authentication, Firestore for database storage, and Firebase Hosting for deployment
+- **APIs**:
+  - Google Calendar API to allow users to add events to their personal calendars.
+- **Payment Integration**: Currently not included but may be integrated in the future (e.g., Stripe or Google Pay).
+- **Hosting**: Firebase Hosting
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Prerequisites
 
-### `npm run eject`
+- Node.js and npm installed
+- Firebase CLI installed (`npm install -g firebase-tools`)
+- A Google Developer account to enable and configure the Google Calendar API
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+## Setup Instructions
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+1. **Clone the Repository**
+   ```bash
+   git clone https://github.com/tkbunbury/eventure-platform.git
+2. **Install Dependencies**
+   ```bash
+   npm install
+3. **Set Up Firebase**
+   ```bash
+   firebase init
+   Select Firebase Hosting, Firestore, and Authentication when prompted.
+   Update the Firebase configuration by creating a .env file or directly in src/firebase/firebase.js.
+4. **Configure Google Calendar API**
+   ```bash
+   In the Google Developer Console, enable the Google Calendar API and create credentials.
+   Add the API key and ClientId to an existing or new .env Firebase config file as shown below:
+   
+   - REACT_APP_GOOGLE_API_KEY=your_google_api_key_here
+   - REACT_APP_GOOGLE_CLIENT_ID=your_google_client_ID_here
+5. **Build and Run Locally**
+   ```bash
+   npm start
+   Open http://localhost:3000 to view in the browser.
+6. **Deploy to Firebase Hosting**
+   ```bash
+   npm run build
+   firebase deploy
+## Test Accounts
 
-## Learn More
+### Staff Account
+- **Email**: `tc1@staffdomain.com`
+- **Password**: `123456`
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+### User Account
+- **Email**: `testuser@hotmail.com`
+- **Password**: `123456`
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+> **Note**: To test google calendar feature, use "sign in with google" feature on login page with a registered google account.
 
-### Code Splitting
+## Additional Information
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+### Security and Privacy
+- Firebase Authentication secures user login.
+- Firestore rules restrict access to only authenticated users for specific actions.
+- Sensitive information, such as payment data, should be handled securely if payment integrations are added in future versions.
 
-### Analyzing the Bundle Size
+### Accessibility
+- The app includes color contrast adjustments for accessibility.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+### Error Handling
+- Error messages are displayed for failed sign-ups, failed event creations, network issues, or missing content.
+- Loading indicators are shown during data retrieval.
 
-### Making a Progressive Web App
+## Known Issues and Limitations
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+- **Payment Integration**: Currently users can attend free events, but paid events will be implemented in future updates.
+- **Calendar Integration**: Only users with a real valid Gmail account can add events to their calendar.
+- **Single-Page App (SPA)**: The app is structured as an SPA, with client-side routing managed by React Router.
 
-### Advanced Configuration
+## Future Enhancements
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+- **Payments**: Integration with Stripe or Google Pay to support paid events.
+- **Email Confirmations**: Send emails when users sign up for an event.
+- **Social Media Sharing**: Allow users to share events on social media platforms.
+- **Mobile App**: Expand to React Native for mobile compatibility.
 
-### Deployment
+## Performance Criteria
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+- Clear and user-friendly interface for event creation and sign-up.
+- Proper error messages and loading indicators to enhance user experience.
+- Responsive and accessible design to support users across devices and assistive technologies.
 
-### `npm run build` fails to minify
+## Created By
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+**Takai Bunbury**  
+
+[https://github.com/tkbunbury](https://github.com/tkbunbury)  
+[https://www.linkedin.com/in/tkbunbury/](https://www.linkedin.com/in/tkbunbury/)  
+
+Feel free to reach out if you have any questions or feedback!
+
