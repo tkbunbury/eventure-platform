@@ -1,12 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  Navigate,
-} from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import { gapi } from "gapi-script";  
 
 import Login from "./components/Authentication/LoginPage/Login";
@@ -23,24 +18,55 @@ import "react-toastify/dist/ReactToastify.css";
 import { auth, db } from "./firebase/firebase";
 import { getDoc, doc, setDoc } from "firebase/firestore";
 
-
 function App() {
   const [user, setUser] = useState(null);
-  const [userRole, setUserRole] = useState(null);  
+  const [userRole, setUserRole] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     function start() {
       gapi.client.init({
-        apiKey: process.env.REACT_APP_GOOGLE_API_KEY, 
-        clientId: process.env.REACT_APP_GOOGLE_CLIENT_ID, 
+        apiKey: process.env.REACT_APP_GOOGLE_API_KEY,
+        clientId: process.env.REACT_APP_GOOGLE_CLIENT_ID,
         discoveryDocs: ["https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest"],
         scope: "https://www.googleapis.com/auth/calendar.events",
+      }).then(() => {
+        const authInstance = gapi.auth2.getAuthInstance();
+        
+        authInstance.currentUser.listen((user) => {
+          if (user.isSignedIn()) {
+            refreshTokenIfNeeded();
+          }
+        });
+
+        const tokenRefreshInterval = setInterval(refreshTokenIfNeeded, 300000); 
+
+        return () => clearInterval(tokenRefreshInterval);
       });
     }
 
     gapi.load("client:auth2", start);
-  }, []); 
+  }, []);
+
+  const refreshTokenIfNeeded = async () => {
+    const authInstance = gapi.auth2.getAuthInstance();
+    const user = authInstance.currentUser.get();
+
+    if (user && user.isSignedIn()) {
+      const authResponse = user.getAuthResponse();
+      const expiresAt = authResponse.expires_at;
+      const currentTime = new Date().getTime();
+
+      if (expiresAt - currentTime < 300000) {  
+        try {
+          const newAuthResponse = await user.reloadAuthResponse();
+          console.log("Token refreshed:", newAuthResponse.access_token);
+        } catch (error) {
+          console.error("Error refreshing token:", error);
+        }
+      }
+    }
+  };
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(async (user) => {
@@ -52,14 +78,13 @@ function App() {
           const userData = userSnap.data();
           setUser(user);
           setUserRole(userData.role);
-          
         } else {
           const userData = {
             email: user.email,
-            firstName: user.displayName ? user.displayName.split(' ')[0] : "",
-            lastName: user.displayName ? user.displayName.split(' ')[1] : "",
+            firstName: user.displayName ? user.displayName.split(" ")[0] : "",
+            lastName: user.displayName ? user.displayName.split(" ")[1] : "",
             photo: user.photoURL || "",
-            role: "non-staff",  
+            role: "non-staff",
           };
 
           await setDoc(userRef, userData);
@@ -70,12 +95,11 @@ function App() {
         setUser(null);
         setUserRole(null);
       }
-      setLoading(false); 
+      setLoading(false);
     });
 
     return () => unsubscribe();
   }, []);
-
 
   if (loading) {
     return <div>Loading...</div>;
