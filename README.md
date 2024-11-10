@@ -81,7 +81,11 @@ The live version of the app is hosted on Firebase and accessible at: [https://ev
 - **Email**: `testuser@hotmail.com`
 - **Password**: `123456`
 
-> **Note**: To test google calendar feature, use "sign in with google" feature on login page with a registered google account.
+### Google Account (User)
+- **Email**: `eventuretest927@gmail.com`
+- **Password**: `Eventure_Test@927`
+
+> **Note**: To test google calendar feature, use "sign in with google" feature on login page with demo google account.
 
 ## Additional Information
 

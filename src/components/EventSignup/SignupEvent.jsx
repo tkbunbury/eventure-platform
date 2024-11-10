@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom'; 
 import { db } from '../../firebase/firebase'; 
-import { collection, addDoc, getDocs, query, where, deleteDoc, doc, updateDoc } from 'firebase/firestore';
+import { collection, addDoc, getDocs, getDoc, query, where, deleteDoc, doc, updateDoc } from 'firebase/firestore';
 import { toast } from 'react-toastify'; 
 import { addEventToGoogleCalendar, removeEventFromGoogleCalendar } from '../../utils/googleCalendarUtils'; 
 import "./SignupEvent.css"
@@ -14,6 +14,7 @@ function SignupEvent({ user, eventId, isSignedUp: initialSignedUpStatus, eventDe
     const [calendarEventId, setCalendarEventId] = useState(null);
     const [signupId, setSignupId] = useState(null); 
     const [isGmailUser, setIsGmailUser] = useState(false); 
+    const [accessToken, setAccessToken] = useState(null);  
 
     useEffect(() => {
         if (user && user.email.endsWith('@gmail.com')) {
@@ -22,6 +23,29 @@ function SignupEvent({ user, eventId, isSignedUp: initialSignedUpStatus, eventDe
             setIsGmailUser(false);
         }
     }, [user]);
+
+    useEffect(() => {
+        const fetchAccessToken = async () => {
+            if (user) {
+                try {
+                    const userDocRef = doc(db, 'Users', user.uid);
+                    const userDoc = await getDoc(userDocRef);
+    
+                    if (userDoc.exists() && userDoc.data().tokens) {
+                        setAccessToken(userDoc.data().tokens.access_token);
+                    } else {
+                        console.error("Access token not found in user's document.");
+                        setAccessToken(null);
+                    }
+                } catch (error) {
+                    console.error('Error retrieving access token:', error.message);
+                }
+            }
+        };
+    
+        fetchAccessToken();
+    }, [user]);  
+    
 
     useEffect(() => {
         const fetchSignupId = async () => {
@@ -132,9 +156,9 @@ function SignupEvent({ user, eventId, isSignedUp: initialSignedUpStatus, eventDe
 
     const handleAddToGoogleCalendar = async () => {
         setLoading(true);
-        try {
-            if(signupId) {
-                const googleCalendarId = await addEventToGoogleCalendar(eventDetails); 
+        try {          
+            if(signupId && accessToken) {
+                const googleCalendarId = await addEventToGoogleCalendar(eventDetails, accessToken); 
                 
                 const signupDocRef = doc(db, 'Signups', signupId);
                 await updateDoc(signupDocRef, { googleCalendarEventId: googleCalendarId });

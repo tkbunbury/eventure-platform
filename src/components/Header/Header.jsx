@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import '../../publicStyles.css';
 import { auth } from '../../firebase/firebase';
+import ConnectToCalendar from '../Authentication/GoogleCalendar/ConnectToCalendar';
 
 function Header({ user, userRole }) {
     const [showDropdown, setShowDropdown] = useState(false);
@@ -122,6 +123,9 @@ function Header({ user, userRole }) {
                                             </li>
                                             <li>
                                                 <button className="dropdown-item" onClick={handleLogout}>Log Out</button>
+                                            </li>
+                                            <li>
+                                                <ConnectToCalendar />
                                             </li>
                                         </ul>
                                     )}

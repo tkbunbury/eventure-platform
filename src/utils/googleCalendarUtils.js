@@ -1,6 +1,6 @@
 import { gapi } from 'gapi-script';
 
-export async function addEventToGoogleCalendar(eventData) {
+export async function addEventToGoogleCalendar(eventData, accessToken) {
     try {
         const [hour, minute] = eventData.time.split(':');  
         const endHour = parseInt(hour) + 1;  
@@ -19,24 +19,23 @@ export async function addEventToGoogleCalendar(eventData) {
             },
         };
 
-        const request = gapi.client.calendar.events.insert({
-            calendarId: 'primary',
-            resource: calendarEvent,
-        });
-        
-        const response = await request.then((res) => {
-            return res;
+        const response = await fetch('https://www.googleapis.com/calendar/v3/calendars/primary/events', {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${accessToken}`, 
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(calendarEvent),
         });
 
-        if (!response) {
+        if (!response.ok) {
             throw new Error('Failed to add event to Google Calendar.');
         }
 
-        const googleCalendarEventId = response.result.id;
-
-        return googleCalendarEventId;
+        const result = await response.json();
+        return result.id; 
     } catch (error) {
-        console.error('Error adding event to Google Calendar: ', error);
+        console.error('Error adding event to Google Calendar:', error);
         throw error;
     }
 }
