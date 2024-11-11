@@ -17,6 +17,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 import { auth, db } from "./firebase/firebase";
 import { getDoc, doc, setDoc } from "firebase/firestore";
+import { refreshTokenIfNeeded } from "./utils/TokenRefresh"; 
 
 function App() {
   const [user, setUser] = useState(null);
@@ -32,41 +33,23 @@ function App() {
         scope: "https://www.googleapis.com/auth/calendar.events",
       }).then(() => {
         const authInstance = gapi.auth2.getAuthInstance();
-        
+
         authInstance.currentUser.listen((user) => {
           if (user.isSignedIn()) {
-            refreshTokenIfNeeded();
+            refreshTokenIfNeeded(user.getId());
           }
         });
 
-        const tokenRefreshInterval = setInterval(refreshTokenIfNeeded, 300000); 
+        const tokenRefreshInterval = setInterval(() => {
+          if (user) refreshTokenIfNeeded(user.uid);
+        }, 300000); 
 
         return () => clearInterval(tokenRefreshInterval);
       });
     }
 
     gapi.load("client:auth2", start);
-  }, []);
-
-  const refreshTokenIfNeeded = async () => {
-    const authInstance = gapi.auth2.getAuthInstance();
-    const user = authInstance.currentUser.get();
-
-    if (user && user.isSignedIn()) {
-      const authResponse = user.getAuthResponse();
-      const expiresAt = authResponse.expires_at;
-      const currentTime = new Date().getTime();
-
-      if (expiresAt - currentTime < 300000) {  
-        try {
-          const newAuthResponse = await user.reloadAuthResponse();
-          console.log("Token refreshed:", newAuthResponse.access_token);
-        } catch (error) {
-          console.error("Error refreshing token:", error);
-        }
-      }
-    }
-  };
+  }, [user]);
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(async (user) => {

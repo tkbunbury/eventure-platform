@@ -156,45 +156,46 @@ function SignupEvent({ user, eventId, isSignedUp: initialSignedUpStatus, eventDe
 
     const handleAddToGoogleCalendar = async () => {
         setLoading(true);
+        
         try {          
-            if(signupId && accessToken) {
+            if (signupId && accessToken) {
                 const googleCalendarId = await addEventToGoogleCalendar(eventDetails, accessToken); 
                 
                 const signupDocRef = doc(db, 'Signups', signupId);
                 await updateDoc(signupDocRef, { googleCalendarEventId: googleCalendarId });
                 setCalendarEventId(googleCalendarId); 
-                toast.success('Event added to Google Calendar!', {
-                    position: 'top-center',
-                });          
+                toast.success('Event added to Google Calendar!', { position: 'top-center' });
             } else {
                 toast.error('Signup ID not found. Please try again.', { position: 'bottom-center' });
-            }          
+            }
         } catch (error) {
-            console.error('Error adding to Google Calendar:', error.message);
-            toast.error('Failed to add event to Google Calendar. Please try again.', {
-                position: 'bottom-center',
-            });
+            if (error.message === 'Unauthorized') {
+                toast.info('Session expired. Please reconnect to Google Calendar.', { position: 'top-center' });
+            } else {
+                console.error('Error adding to Google Calendar:', error);
+                toast.error('Failed to add event to Google Calendar. Please try again.', { position: 'bottom-center' });
+            }
         } finally {
             setLoading(false);
         }
     };
+    
 
     const handleRemoveFromGoogleCalendar = async () => {
         setLoading(true);
         try {
-            await removeEventFromGoogleCalendar(calendarEventId); 
+            await removeEventFromGoogleCalendar(calendarEventId, accessToken);
             const signupDocRef = doc(db, 'Signups', signupId);
             await updateDoc(signupDocRef, { googleCalendarEventId: null });
-            toast.success('Event removed from Google Calendar!', {
-                position: 'top-center',
-            });
-
-            setCalendarEventId(null)
+            toast.success('Event removed from Google Calendar!', { position: 'top-center' });
+    
+            setCalendarEventId(null);
         } catch (error) {
-            console.error('Error removing event from Google Calendar: ', error);
-            toast.error('Failed to remove event from Google Calendar. Please try again.', {
-                position: 'bottom-center',
-            });
+            if (error.message === 'Unauthorized') {
+                toast.info('Session expired. Please reconnect to Google Calendar.', { position: 'top-center' });
+            } else {
+                toast.error('Failed to remove event from Google Calendar. Please try again.', { position: 'bottom-center' });
+            }
         } finally {
             setLoading(false);
         }

@@ -113,6 +113,12 @@ function Header({ user, userRole }) {
                                     {showDropdown && (
                                         <ul className="dropdown-menu dropdown-menu-end show" aria-labelledby="userDropdown">
                                             <li>
+                                                <ConnectToCalendar className="dropdown-item"/>
+                                            </li>
+                                            <li>
+                                                <hr className="dropdown-divider" />
+                                            </li>
+                                            <li>
                                                 <Link className="dropdown-item" to="/events">Browse Events</Link>
                                             </li>
                                             <li>
@@ -124,9 +130,7 @@ function Header({ user, userRole }) {
                                             <li>
                                                 <button className="dropdown-item" onClick={handleLogout}>Log Out</button>
                                             </li>
-                                            <li>
-                                                <ConnectToCalendar />
-                                            </li>
+                                            
                                         </ul>
                                     )}
                                 </li>
