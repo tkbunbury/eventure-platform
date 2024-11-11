@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { getUserId } from '../../../utils/AuthHelpers';
 
 
-function ConnectToCalendar() {
+function ConnectToCalendar({ className }) {
 
     const google = window.google
 
@@ -58,7 +58,7 @@ function ConnectToCalendar() {
     }
 
     return (
-        <button onClick={requestCalendarAccess}>
+        <button onClick={requestCalendarAccess} className={className}>
             Connect to Google Calendar
         </button>
     );

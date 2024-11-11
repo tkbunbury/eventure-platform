@@ -1,5 +1,3 @@
-import { gapi } from 'gapi-script';
-
 export async function addEventToGoogleCalendar(eventData, accessToken) {
     try {
         const [hour, minute] = eventData.time.split(':');  
@@ -28,6 +26,10 @@ export async function addEventToGoogleCalendar(eventData, accessToken) {
             body: JSON.stringify(calendarEvent),
         });
 
+        if (response.status === 401) {
+            throw new Error('Unauthorized');
+        }
+
         if (!response.ok) {
             throw new Error('Failed to add event to Google Calendar.');
         }
@@ -40,18 +42,27 @@ export async function addEventToGoogleCalendar(eventData, accessToken) {
     }
 }
 
-export async function removeEventFromGoogleCalendar(googleCalendarEventId) {
-    try {
-        
-        const request = gapi.client.calendar.events.delete({
-            calendarId: 'primary',  
-            eventId: googleCalendarEventId,  
-        });
 
-        const response = await request.execute();
-        return response;  
+export async function removeEventFromGoogleCalendar(googleCalendarEventId, accessToken) {
+    try {
+        const response = await fetch(
+            `https://www.googleapis.com/calendar/v3/calendars/primary/events/${googleCalendarEventId}`, 
+            {
+                method: 'DELETE',
+                headers: {
+                    'Authorization': `Bearer ${accessToken}`,  // Use the access token
+                    'Content-Type': 'application/json',
+                }
+            }
+        );
+
+        if (!response.ok) {
+            throw new Error('Failed to remove event from Google Calendar.');
+        }
+
+        return response.status === 204;  // Google Calendar returns a 204 status on successful deletion
     } catch (error) {
-        console.error('Error removing event from Google Calendar: ', error);
+        console.error('Error removing event from Google Calendar:', error);
         throw error;
     }
 }
