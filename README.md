@@ -21,7 +21,8 @@ The live version of the app is hosted on Firebase and accessible at: [https://ev
 ### Roles
 
 - **Staff Account**: Able to create, delete, and manage events.
-- **User Account**: Can browse, sign up, and add events to their calendar.
+- **Non-Gmail User Account**: Able to browse and sign up for events.
+- **Gmail User Account**: Can browse, sign up, and add events to their calendar.
 - **Guest**: Can browse events.
 
 > **Note**: Test accounts for staff and user roles are provided below for evaluation.
@@ -77,15 +78,20 @@ The live version of the app is hosted on Firebase and accessible at: [https://ev
 - **Email**: `tc1@staffdomain.com`
 - **Password**: `123456`
 
-### User Account
+### Non-Gmail User Account
 - **Email**: `testuser@hotmail.com`
 - **Password**: `123456`
 
-### Google Account (User)
+### Gmail User Account
 - **Email**: `eventuretest927@gmail.com`
 - **Password**: `Eventure_Test@927`
 
-> **Note**: To test google calendar feature, use "sign in with google" feature on login page with demo google account.
+## Testing Google Calendar Feature
+
+To test the Google Calendar feature:
+
+1. Use the "Sign in with Google" feature on the login page with the demo Google account.
+2. **Note**: After logging in, be sure to click the **"Connect to Google Calendar"** button to enable the option to add events to your Google Calendar.
 
 ## Additional Information
 

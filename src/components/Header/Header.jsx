@@ -6,6 +6,7 @@ import ConnectToCalendar from '../Authentication/GoogleCalendar/ConnectToCalenda
 
 function Header({ user, userRole }) {
     const [showDropdown, setShowDropdown] = useState(false);
+    const [isNavbarCollapsed, setIsNavbarCollapsed] = useState(true); 
     const [searchName, setSearchName] = useState('');
     const [searchLocation, setSearchLocation] = useState('');
     const navigate = useNavigate();
@@ -27,6 +28,10 @@ function Header({ user, userRole }) {
         setShowDropdown(false);
     };
 
+    const toggleNavbar = () => {
+        setIsNavbarCollapsed(!isNavbarCollapsed); 
+    };
+
     const handleSearch = (e) => {
         e.preventDefault();
         navigate(`/events?name=${encodeURIComponent(searchName)}&location=${encodeURIComponent(searchLocation)}`);
@@ -36,12 +41,19 @@ function Header({ user, userRole }) {
         <nav className="navbar navbar-expand-lg navbar-light bg-light fixed-top">
             <div className="container-fluid">
                 <Link className="navbar-brand eventure-title" to="/homepage">Eventure</Link>
-    
-                <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+
+                <button 
+                    className="navbar-toggler" 
+                    type="button" 
+                    onClick={toggleNavbar} 
+                    aria-controls="navbarNav" 
+                    aria-expanded={!isNavbarCollapsed} 
+                    aria-label="Toggle navigation"
+                >
                     <span className="navbar-toggler-icon"></span>
                 </button>
-    
-                <div className="collapse navbar-collapse" id="navbarNav">
+
+                <div className={`collapse navbar-collapse ${isNavbarCollapsed ? '' : 'show'}`} id="navbarNav">
                     <ul className="navbar-nav mx-auto"> 
                         <li className="nav-item">
                             <form className="d-flex" onSubmit={handleSearch}>
@@ -67,11 +79,10 @@ function Header({ user, userRole }) {
                                 >
                                     Search
                                 </button>
-
                             </form>
                         </li>
                     </ul>
-    
+
                     <ul className="navbar-nav ms-auto">
                         {!user && (
                             <>
@@ -86,7 +97,7 @@ function Header({ user, userRole }) {
                                 </li>
                             </>
                         )}
-    
+
                         {user && (
                             <>
                                 {userRole === "staff" && (
@@ -109,15 +120,18 @@ function Header({ user, userRole }) {
                                         />
                                         {user.email}
                                     </div>
-    
                                     {showDropdown && (
                                         <ul className="dropdown-menu dropdown-menu-end show" aria-labelledby="userDropdown">
-                                            <li>
-                                                <ConnectToCalendar className="dropdown-item"/>
-                                            </li>
-                                            <li>
-                                                <hr className="dropdown-divider" />
-                                            </li>
+                                            {user.email.endsWith('@gmail.com') && (
+                                                <>
+                                                <li>
+                                                    <ConnectToCalendar className="dropdown-item"/>
+                                                </li>
+                                                <li>
+                                                    <hr className="dropdown-divider" />
+                                                </li>
+                                            </>
+                                            )}
                                             <li>
                                                 <Link className="dropdown-item" to="/events">Browse Events</Link>
                                             </li>
@@ -130,7 +144,6 @@ function Header({ user, userRole }) {
                                             <li>
                                                 <button className="dropdown-item" onClick={handleLogout}>Log Out</button>
                                             </li>
-                                            
                                         </ul>
                                     )}
                                 </li>
@@ -141,7 +154,6 @@ function Header({ user, userRole }) {
             </div>
         </nav>
     );
-    
 }
 
 export default Header;

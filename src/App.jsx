@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
+import "../node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"; 
 import "./App.css";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import { gapi } from "gapi-script";  
@@ -11,6 +12,7 @@ import CreateEvent from "./components/CreateEvent/CreateEvent";
 import EventList from "./components/EventList/EventList";
 import UserEvents from './components/UserEvents/UserEvents';
 import AccessDenied from "./components/Authentication/AccessDenied/AccessDenied";
+import LoadingSpinner from './components/LoadingSpinner/LoadingSpinner'; 
 import Header from "./components/Header/Header";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -85,8 +87,8 @@ function App() {
   }, []);
 
   if (loading) {
-    return <div>Loading...</div>;
-  }
+    return <LoadingSpinner />;
+}
 
   return (
     <Router>
