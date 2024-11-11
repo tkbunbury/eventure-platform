@@ -50,7 +50,7 @@ export async function removeEventFromGoogleCalendar(googleCalendarEventId, acces
             {
                 method: 'DELETE',
                 headers: {
-                    'Authorization': `Bearer ${accessToken}`,  // Use the access token
+                    'Authorization': `Bearer ${accessToken}`,  
                     'Content-Type': 'application/json',
                 }
             }
@@ -60,7 +60,7 @@ export async function removeEventFromGoogleCalendar(googleCalendarEventId, acces
             throw new Error('Failed to remove event from Google Calendar.');
         }
 
-        return response.status === 204;  // Google Calendar returns a 204 status on successful deletion
+        return response.status === 204;  
     } catch (error) {
         console.error('Error removing event from Google Calendar:', error);
         throw error;

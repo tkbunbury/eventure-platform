@@ -28,14 +28,14 @@ export const refreshTokenIfNeeded = async (userId) => {
     }
 
     const currentTime = new Date().getTime();
-    if (expiryDate - currentTime > 300000) {  // Only refresh if less than 5 minutes left
-        return;  // Token still valid
+    if (expiryDate - currentTime > 300000) {  
+        return;  
     }
 
     const oAuth2Client = new google.auth.OAuth2(
         process.env.REACT_APP_GOOGLE_CLIENT_ID,
         process.env.REACT_APP_GOOGLE_CLIENT_SECRET,
-        "postmessage"  // Replace with your redirect URI
+        "postmessage"  
     );
 
     oAuth2Client.setCredentials({ refresh_token: refreshToken });
