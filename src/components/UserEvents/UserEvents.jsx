@@ -4,6 +4,7 @@ import { collection, query, where, getDocs } from 'firebase/firestore';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import './UserEvents.css'; 
 import EventModal from '../EventModal/EventModal';
+import LoadingSpinner from '../LoadingSpinner/LoadingSpinner';
 
 function UserEvents() {
     const [events, setEvents] = useState([]);
@@ -25,6 +26,7 @@ function UserEvents() {
 
     useEffect(() => {
         const fetchEvents = async () => {
+            if (!user || !userRole) return; 
             setLoading(true);
             try {
                 if (!user) return;
@@ -39,7 +41,6 @@ function UserEvents() {
 
                     if (eventIds.length === 0) {
                         setEvents([]);
-                        setLoading(false);
                         return;
                     }
 
@@ -76,7 +77,7 @@ function UserEvents() {
     };
 
     if (loading) {
-        return <div className="loading-spinner"><div className="spinner"></div><p>Loading events...</p></div>;
+        return <LoadingSpinner />;
     }
 
     return (
@@ -99,9 +100,9 @@ function UserEvents() {
                             </div>
                         </div>
                     ))
-                ) : (
+                ) : !loading && events.length === 0 ? (
                     <p className="text-center">No events found.</p>
-                )}
+                ) : null}
             </div>
 
             {selectedEvent && (

@@ -5,6 +5,7 @@ import { setDoc, doc } from "firebase/firestore";
 import { toast } from "react-toastify";
 import "./Signup.css";
 import { useNavigate } from "react-router-dom"; 
+import LoadingSpinner from "../../LoadingSpinner/LoadingSpinner";
 
 function Register() {
     const [email, setEmail] = useState("");
@@ -58,15 +59,13 @@ function Register() {
         }
     };
 
+    if (loading) {
+        return <LoadingSpinner />; 
+    }
+
     return (
         <div className="auth-wrapper">
-            <div className="auth-inner">
-                {loading ? (
-                    <div className="loading-spinner">
-                        <div className="spinner"></div>
-                        <p className="loading-text">Signing you up, please wait...</p>
-                    </div>
-                ) : (
+            <div className="auth-inner">         
                     <form onSubmit={handleRegister}>
                         <h3>Create an Account</h3>
 
@@ -132,7 +131,6 @@ function Register() {
                             Already registered? <a href="/login">Log in</a>
                         </p>
                     </form>
-                )}
             </div>
         </div>
     );

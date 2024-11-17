@@ -5,6 +5,7 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { useLocation } from 'react-router-dom';
 import './EventList.css';
 import EventModal from '../EventModal/EventModal';
+import LoadingSpinner from '../LoadingSpinner/LoadingSpinner';
 
 function EventList() {
     const [events, setEvents] = useState([]);
@@ -83,7 +84,7 @@ function EventList() {
     };
 
     if (loadingEvents) {
-        return <div className="loading-spinner"><div className="spinner"></div><p>Loading events...</p></div>;
+        return <LoadingSpinner />;
     }
 
     return (

@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { db } from '../../firebase/firebase'; 
 import { collection, query, where, getDocs } from 'firebase/firestore'; 
 import './Homepage.css'; 
+import LoadingSpinner from '../LoadingSpinner/LoadingSpinner';
 
 function Homepage() {
     const navigate = useNavigate();
@@ -31,12 +32,7 @@ function Homepage() {
     }, []);
 
     if (loading) {
-        return (
-            <div className="loading-container">
-                <div className="spinner"></div>
-                <p>Loading...</p>
-            </div>
-        );
+        return <LoadingSpinner />;
     }
 
     return (

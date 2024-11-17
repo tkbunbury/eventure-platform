@@ -3,8 +3,8 @@ import './LoadingSpinner.css';
 
 function LoadingSpinner() {
     return (
-        <div className="spinner-container">
-            <div className="loading-spinner"></div>
+        <div className="spinner-overlay">
+            <div className="spinner"></div>
         </div>
     );
 }
