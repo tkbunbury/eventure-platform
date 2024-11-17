@@ -33,23 +33,6 @@
     margin-top: 30px;
   }
 
-  .loading-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    flex-direction: column;
-}
-
-.spinner {
-    width: 50px;
-    height: 50px;
-    border: 5px solid rgba(0, 0, 0, 0.1);
-    border-top-color: #007bff;
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
-}
-
 .learn-more-button {
   background: linear-gradient(135deg, #42a5f5, #478ed1);
   border: none;
@@ -71,13 +54,6 @@
 .learn-more-button:focus {
   outline: none;
   box-shadow: 0 0 0 3px rgba(66, 165, 245, 0.5);
-}
-
-
-@keyframes spin {
-    to {
-        transform: rotate(360deg);
-    }
 }
 
 .custom-button {

@@ -4,6 +4,7 @@ import { collection, query, where, getDocs, updateDoc, doc } from 'firebase/fire
 import './EventModal.css';
 import SignupEvent from '../EventSignup/SignupEvent'; 
 import DeleteEventButton from '../EventRemoval/DeleteEvent'; 
+import LoadingSpinner from '../LoadingSpinner/LoadingSpinner';
 
 function EventModal({ selectedEvent, user, userRole, onClose, onEventDeleted }) {
     const [loadingSignupStatus, setLoadingSignupStatus] = useState(true);
@@ -57,6 +58,10 @@ function EventModal({ selectedEvent, user, userRole, onClose, onEventDeleted }) 
 
     if (!selectedEvent) return null;
 
+    if (loadingSignupStatus || loadingFeature) {
+        return <LoadingSpinner />;
+    }
+
     return (
         <div className="modal fade show d-block" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
             <div className="modal-dialog">
@@ -87,21 +92,15 @@ function EventModal({ selectedEvent, user, userRole, onClose, onEventDeleted }) 
                                     id="featureCheckbox"
                                     checked={isFeatured}
                                     onChange={handleFeatureChange}
-                                    disabled={loadingFeature}
                                 />
                                 <label className="form-check-label" htmlFor="featureCheckbox">
-                                    {loadingFeature ? 'Updating...' : 'Feature this event'}
+                                    Feature this event
                                 </label>
                             </div>
                         )}
                     </div>
                     <div className="modal-footer">
-                        {loadingSignupStatus ? (
-                            <div className="loading-spinner">
-                                <div className="spinner"></div>
-                                <p>Loading...</p>
-                            </div>
-                        ) : userRole === 'staff' ? (
+                        {userRole === 'staff' ? (
                             <DeleteEventButton eventId={selectedEvent.id} onEventDeleted={onEventDeleted} />
                         ) : (
                             <SignupEvent

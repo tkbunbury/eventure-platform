@@ -4,6 +4,7 @@ import { auth } from "../../../firebase/firebase";
 import { toast } from "react-toastify";
 import SignInwithGoogle from "../GoogleSignIn/SignInWithGoogle";
 import "./Login.css";
+import LoadingSpinner from "../../LoadingSpinner/LoadingSpinner";
 
 function Login() {
     const [email, setEmail] = useState("");
@@ -38,15 +39,14 @@ function Login() {
         }
     };
 
+    if (loading) {
+        return <LoadingSpinner />; 
+    }
+
     return (
         <div className="auth-wrapper">
             <div className="auth-inner">
-                {loading ? (
-                    <div className="loading-spinner">
-                        <div className="spinner"></div>
-                        <p className="loading-text">Loading...</p>
-                    </div>
-                ) : (
+                
                     <form onSubmit={handleSubmit}>
                         <h3>Log in</h3>
 
@@ -82,7 +82,7 @@ function Login() {
                         </p>
                         <SignInwithGoogle />
                     </form>
-                )}
+                
             </div>
         </div>
     );
